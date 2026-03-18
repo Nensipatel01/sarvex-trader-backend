@@ -1,0 +1,15 @@
+# Root gitignore
+.env
+.env.*
+node_modules/
+dist/
+__pycache__/
+*.pyc
+venv/
+.pytest_cache/
+.pyre_configuration
+sarvex_trader.db
+.vercel/
+.railway/
+backend/.env
+frontend/.env
