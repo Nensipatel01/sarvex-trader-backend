@@ -1,0 +1,25 @@
+# Backend gitignore
+.env
+.env.*
+__pycache__/
+*.pyc
+venv/
+.pytest_cache/
+.pyre_configuration
+sarvex_trader.db
+.dockerignore
+package-lock.json
+main_backup.py
+requirements_backup.txt
+temp_main.py
+test_results.txt
+test_results_ascii.txt
+deploy_trigger.txt
+check_all_urls.py
+check_imports.py
+check_render_root.py
+reset_password.py
+seed_user.py
+test_api_login.py
+test_login.py
+test_login_render.py
