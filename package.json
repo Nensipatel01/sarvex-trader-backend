@@ -6,7 +6,7 @@
     "frontend"
   ],
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm install && npm run build && cd .. && mkdir -p dist && cp -r frontend/dist/* ./dist/",
     "install-frontend": "cd frontend && npm install",
     "install-backend": "cd backend && pip install -r requirements.txt"
   }
