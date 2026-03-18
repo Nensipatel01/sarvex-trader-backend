@@ -11,4 +11,7 @@ export default defineConfig({
     force: true,
     include: ['lucide-react', 'framer-motion', 'recharts', 'axios'],
   },
+  build: {
+    chunkSizeWarningLimit: 2000,
+  },
 })
