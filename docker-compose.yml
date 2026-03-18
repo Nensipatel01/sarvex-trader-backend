@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # PostgreSQL Database (Sarvex Trader)
+  # ----------------------------------------
+  db:
+    image: postgres:15-alpine
+    container_name: sarvex_db
+    restart: always
+    environment:
+      POSTGRES_USER: sarvex_admin
+      POSTGRES_PASSWORD: secure_database_password_123
+      POSTGRES_DB: sarvex_trader
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sarvex_admin -d sarvex_trader"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------
+  # FastAPI Backend (Python)
+  # ----------------------------------------
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sarvex_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://sarvex_admin:secure_database_password_123@db:5432/sarvex_trader
+      - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ----------------------------------------
+  # React Frontend (Vite/Nginx)
+  # ----------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sarvex_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
