@@ -144,6 +144,10 @@ const aiIntel = {
   analyze: async (symbol, timeframe) => (await api.post('/ai-intelligence/analyze', { symbol, timeframe })).data,
 }
 
+const backtest = {
+  run: async (params) => (await api.post('/backtest/run', params)).data,
+}
+
 export default {
   auth,
   market,
@@ -157,6 +161,7 @@ export default {
   risk,
   execution,
   aiIntel,
+  backtest,
   journal,
   alerts,
   options,

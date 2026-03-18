@@ -13,8 +13,9 @@ import Settings from './pages/Settings'
 import Login from './pages/Login'
 import Clients from './pages/Clients'
 import Journal from './pages/Journal'
-import Execution from './pages/Execution'
 import NeuralTerminal from './pages/NeuralTerminal'
+import Backtest from './pages/Backtest'
+import IndicatorBuilder from './pages/IndicatorBuilder'
 
 import { NotificationProvider } from './context/NotificationContext'
 import ToastContainer from './components/ToastContainer'
@@ -47,6 +48,8 @@ function App() {
                   <Route path="lab" element={<Lab />} />
                   <Route path="execution" element={<Execution />} />
                   <Route path="terminal" element={<NeuralTerminal />} />
+                  <Route path="backtest" element={<Backtest />} />
+                  <Route path="indicators" element={<IndicatorBuilder />} />
                   <Route path="brokers" element={<Clients />} />
                   <Route path="accounts" element={<Portfolio />} />
                   <Route path="logs" element={<Journal />} />

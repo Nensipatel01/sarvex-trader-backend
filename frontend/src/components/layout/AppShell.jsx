@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   LayoutGrid, Share2, Users, User, Brain, Zap, 
   Bell, Menu, LogOut, Code2, Layers, Globe, Beaker, ShieldCheck,
-  ChevronRight, X, Github, Settings
+  ChevronRight, X, Github, Settings, Activity
 } from 'lucide-react'
 
 const navItems = [
@@ -13,6 +13,8 @@ const navItems = [
   { path: '/markets', icon: Globe, label: 'Markets' },
   { path: '/portfolio', icon: Layers, label: 'Portfolio' },
   { path: '/strategy', icon: Code2, label: 'Strategies' },
+  { path: '/backtest', icon: Activity, label: 'Backtesting' },
+  { path: '/indicators', icon: Code2, label: 'Indicator Foundry' },
   { path: '/risk-management', icon: ShieldCheck, label: 'Risk Controls' },
   { path: '/brokers', icon: Share2, label: 'Accounts' },
   { path: '/settings', icon: Settings, label: 'Settings' },
