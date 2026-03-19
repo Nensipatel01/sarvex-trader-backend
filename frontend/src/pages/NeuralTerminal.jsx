@@ -8,10 +8,15 @@ import {
   Maximize2, Share2
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useMarketData } from '../hooks/useMarketData'
 
 export default function NeuralTerminal() {
   const navigate = useNavigate()
   const [activeTimeframe, setActiveTimeframe] = useState('1H')
+  const [symbol, setSymbol] = useState('BTC')
+  
+  // Connect to live market data
+  const { price, change, status } = useMarketData(symbol)
 
   const newsItems = [
     {
@@ -62,13 +67,19 @@ export default function NeuralTerminal() {
         </div>
 
         <div className="flex items-center gap-4 w-full md:w-auto">
-           <div className="flex-1 md:flex-none p-6 rounded-[1.5rem] bg-[#121212] border border-white/5 flex flex-col items-center justify-center min-w-[140px]">
-              <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em] mb-1">Current Price</span>
-              <span className="text-xl font-bold text-white tracking-tighter">$64,281.50</span>
+           <div className="flex-1 md:flex-none p-6 rounded-[1.5rem] bg-[#121212] border border-white/5 flex flex-col items-center justify-center min-w-[200px]">
+              <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em] mb-1">
+                {status === 'connected' ? 'Live Price' : 'Connecting Stream...'}
+              </span>
+              <span className="text-xl font-bold text-white tracking-tighter tabular-nums">
+                ${price > 0 ? price.toLocaleString() : '---'}
+              </span>
            </div>
            <div className="flex-1 md:flex-none p-6 rounded-[1.5rem] bg-[#121212] border border-white/5 flex flex-col items-center justify-center min-w-[140px]">
               <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em] mb-1">24h Change</span>
-              <span className="text-xl font-bold text-emerald-500 tracking-tighter">+1.24%</span>
+              <span className={`text-xl font-bold tracking-tighter ${change >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                {change >= 0 ? '+' : ''}{change}%
+              </span>
            </div>
         </div>
       </div>
