@@ -18,8 +18,9 @@ export default function Clients() {
   // Forms
   const [clientForm, setClientForm] = useState({ name: '', email: '', notes: '' })
   const [brokerForm, setBrokerForm] = useState({ 
-    name: '', type: 'Binance', client_id: '', 
-    broker_user_id: '', password: '', api_key: '', api_secret: '' 
+    name: '', type: 'Angel One', client_id: '', 
+    broker_user_id: '', password: '', api_key: '', api_secret: '',
+    totp_secret: ''
   })
 
   useEffect(() => {
@@ -353,9 +354,7 @@ export default function Clients() {
                       onChange={e => setBrokerForm({...brokerForm, type: e.target.value})}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white appearance-none"
                     >
-                      <option>Binance</option>
-                      <option>MT5</option>
-                      <option>MT4</option>
+                      <option>Angel One</option>
                       <option>Interactive Brokers</option>
                     </select>
                   </div>
@@ -376,7 +375,7 @@ export default function Clients() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">API Credential / Token</label>
+                  <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">API Key</label>
                   <input 
                     type="password" required value={brokerForm.api_key}
                     onChange={e => setBrokerForm({...brokerForm, api_key: e.target.value})}
@@ -384,6 +383,18 @@ export default function Clients() {
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white"
                   />
                 </div>
+
+                {brokerForm.type === 'Angel One' && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">TOTP Secret Key (2FA)</label>
+                    <input 
+                      type="password" required value={brokerForm.totp_secret}
+                      onChange={e => setBrokerForm({...brokerForm, totp_secret: e.target.value})}
+                      placeholder="e.g. ABC123XYZ..."
+                      className="w-full bg-white/5 border border-[var(--orange-primary)]/20 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">Secure Secret</label>
