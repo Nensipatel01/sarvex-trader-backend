@@ -374,14 +374,25 @@ export default function Clients() {
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">API Key</label>
-                  <input 
-                    type="password" required value={brokerForm.api_key}
-                    onChange={e => setBrokerForm({...brokerForm, api_key: e.target.value})}
-                    placeholder="••••••••••••••••"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">API Key</label>
+                    <input 
+                      type="password" required value={brokerForm.api_key}
+                      onChange={e => setBrokerForm({...brokerForm, api_key: e.target.value})}
+                      placeholder="••••••••••••••••"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">Broker Client ID</label>
+                    <input 
+                      type="text" required value={brokerForm.broker_user_id}
+                      onChange={e => setBrokerForm({...brokerForm, broker_user_id: e.target.value})}
+                      placeholder="e.g. S12345"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-[var(--orange-primary)]/40 transition-all font-bold text-sm text-white"
+                    />
+                  </div>
                 </div>
 
                 {brokerForm.type === 'Angel One' && (
@@ -397,7 +408,7 @@ export default function Clients() {
                 )}
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">Secure Secret</label>
+                  <label className="text-[10px] font-bold uppercase text-zinc-500 ml-2">Broker Password / PIN</label>
                   <input 
                     type="password" required value={brokerForm.api_secret}
                     onChange={e => setBrokerForm({...brokerForm, api_secret: e.target.value})}
