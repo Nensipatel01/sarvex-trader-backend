@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'wss://web-production-ce70.up.railway.app/ws';
+const WS_URL = import.meta.env.VITE_WS_URL || 'wss://web-production-ce70.up.railway.app/api/ws';
 
 export const useMarketData = (symbol) => {
   const [data, setData] = useState({ price: 0, change: 0, timestamp: Date.now() });
