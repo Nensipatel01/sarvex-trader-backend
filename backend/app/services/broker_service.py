@@ -20,31 +20,53 @@ class BrokerService:
             raise ValueError("Incomplete broker credentials")
 
         self.smart_api = SmartConnect(api_key=api_key)
-        totp = pyotp.TOTP(totp_secret).now()
+        totp_val = pyotp.TOTP(totp_secret).now()
         
-        data = self.smart_api.generateSession(username, password, totp)
+        data = self.smart_api.generateSession(username, password, totp_val)
         
-        if data['status']:
-            # Store session info if needed, or just keep it in memory for now
+        if data.get('status'):
+            # Store essential tokens on the account model if persistent session is needed
+            # For now, we return them to the caller
+            account.last_sync = datetime.utcnow()
             return data
         else:
-            raise Exception(f"Login failed: {data['message']}")
+            raise Exception(f"SmartAPI Login failed: {data.get('message', 'Unknown error')}")
 
-    def get_ohlcv(self, symbol, interval="ONE_MINUTE", days=1):
-        """Fetches historical data from Angel One."""
+    def get_ltp(self, exchange, symbol, token):
+        """Get Last Traded Price from SmartAPI."""
         if not self.smart_api:
             raise Exception("Broker not authenticated")
-            
-        # Implementation depends on symbol mapping (NSE/BSE)
-        # For now, this is a placeholder for the actual API call
-        # data = self.smart_api.getCandleData(params)
-        pass
+        
+        res = self.smart_api.ltpData(exchange, f"{symbol}-EQ", token)
+        if res.get('status'):
+            return res.get('data')
+        return None
 
-    def get_ltp(self, exchange, symbol, symboltoken):
-        """Get Last Traded Price."""
-        if not self.smart_api:
-            return None
-        return self.smart_api.getLtp(exchange, symbol, symboltoken)
+    def start_stream(self, client_code, feed_token, api_key, on_tick_callback):
+        """
+        Initializes real-time SmartStream for live market data.
+        """
+        from SmartApi.smartStreamWS import SmartStreamWS
+        
+        # This will be used by ws.py to relay data to clients
+        sws = SmartStreamWS(feed_token, client_code)
+        
+        def on_tick(ws, ticks):
+            if on_tick_callback:
+                on_tick_callback(ticks)
+        
+        def on_connect(ws, response):
+            print("SmartStream Connected")
+        
+        def on_error(ws, code, reason):
+            print(f"SmartStream Error: {code} - {reason}")
+
+        sws.on_tick = on_tick
+        sws.on_connect = on_connect
+        sws.on_error = on_error
+        
+        # Start in background
+        return sws
 
     def place_order(self, params):
         """
@@ -69,15 +91,5 @@ class BrokerService:
             return []
         res = self.smart_api.holding()
         return res.get('data', []) if res.get('status') else []
-
-    def start_stream(self, correlation_id, action, mode, token_list):
-        """
-        Starts the SmartStream for real-time tick data.
-        Note: This usually requires a separate SmartStream connection.
-        """
-        # Placeholder for SmartStream implementation
-        # from SmartApi.smartStreamWS import SmartStreamWS
-        # ss = SmartStreamWS(auth_token, api_key, client_code, feed_token)
-        pass
 
 # Singleton-ish accessor or factory could be implemented here

@@ -8,6 +8,7 @@ from app.core.security import encrypt_value, decrypt_value
 from app.services.broker_service import BrokerService
 from pydantic import BaseModel
 from datetime import datetime
+from app.core.symbols import get_symbol_token
 import random
 
 router = APIRouter(prefix="/brokers", tags=["Brokers"])
@@ -141,13 +142,16 @@ def place_broker_order(
         service.login(account)
         
         # Format params for SmartApi
+        symbol_key = order_in.symbol.upper()
+        token = get_symbol_token(symbol_key)
+        
         params = {
             "variety": "NORMAL",
-            "tradingsymbol": f"{order_in.symbol}-EQ",
-            "symboltoken": "2885", # TODO: Dynamic token lookup
-            "transactiontype": order_in.side,
+            "tradingsymbol": f"{symbol_key}-EQ",
+            "symboltoken": token,
+            "transactiontype": order_in.side.upper(),
             "exchange": "NSE",
-            "ordertype": order_in.type,
+            "ordertype": order_in.type.upper(),
             "producttype": "DELIVERY",
             "duration": "DAY",
             "price": order_in.price or 0,
