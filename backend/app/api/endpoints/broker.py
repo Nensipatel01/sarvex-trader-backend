@@ -141,6 +141,13 @@ def place_broker_order(
         service = BrokerService(db)
         service.login(account)
         
+        # Balance Validation (Mental Model Step 3)
+        positions = service.get_positions()
+        # For a real app, we'd check against account balance or available margin
+        # For now, we ensure the account has some dummy equity or we check the API balance
+        if account.balance < (order_in.quantity * (order_in.price or 100)):
+             raise HTTPException(status_code=400, detail="Insufficient institutional balance")
+
         # Format params for SmartApi
         symbol_key = order_in.symbol.upper()
         token = get_symbol_token(symbol_key)

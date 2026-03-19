@@ -30,7 +30,11 @@ class BrokerService:
             account.last_sync = datetime.utcnow()
             return data
         else:
-            raise Exception(f"SmartAPI Login failed: {data.get('message', 'Unknown error')}")
+            # Detailed error logging for debugging (Mental Model Step 4)
+            error_msg = data.get('message', 'Unknown error')
+            error_code = data.get('errorcode', 'N/A')
+            print(f"❌ SmartAPI Login Failed | Client: {username} | Error: {error_msg} ({error_code})")
+            raise Exception(f"SmartAPI Login failed: {error_msg} [{error_code}]")
 
     def get_ltp(self, exchange, symbol, token):
         """Get Last Traded Price from SmartAPI."""
@@ -91,5 +95,12 @@ class BrokerService:
             return []
         res = self.smart_api.holding()
         return res.get('data', []) if res.get('status') else []
+
+    def get_rms_limit(self):
+        """Fetches risk management system (RMS) limits / margin."""
+        if not self.smart_api:
+            return None
+        res = self.smart_api.rmsLimit()
+        return res.get('data', {}) if res.get('status') else {}
 
 # Singleton-ish accessor or factory could be implemented here

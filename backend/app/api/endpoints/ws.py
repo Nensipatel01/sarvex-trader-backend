@@ -2,6 +2,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from typing import List, Dict
 import json
 import asyncio
+import time
 
 router = APIRouter(prefix="/ws", tags=["WebSocket"])
 
@@ -52,7 +53,6 @@ relay = StreamRelay()
 async def tick_simulator(symbol: str):
     """Simulates ticks for a symbol if no real broker feed is active."""
     import random
-    import time
     price = 100.0 # Base price
     while symbol in manager.active_connections and manager.active_connections[symbol]:
         if symbol in relay.active_symbols:
